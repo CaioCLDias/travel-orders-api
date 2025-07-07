@@ -80,8 +80,17 @@ cd travel-orders-api
 cp .env.example .env
 ```
 
+#### 2. Instalar as Dependencias
+```bash
+composer install 
+```
+Caso de erro: 
 
-#### 2. Executar com Docker Compose Dev
+```bash
+composer update
+```
+
+#### 3. Executar com Docker Compose Dev
 
 ```bash
 # Subir containers com configuração de desenvolvimento
@@ -96,7 +105,7 @@ docker-compose -f docker-compose.dev.yml exec laravel php artisan jwt:secret
 docker-compose -f docker-compose.dev.yml exec laravel php artisan migrate
 ```
 
-#### 3. Acessar Aplicação
+#### 4. Acessar Aplicação
 
 - **API**: http://localhost
 
