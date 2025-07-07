@@ -69,12 +69,11 @@ cp .env.example .env
 #### 4. Acessar Aplicação
 
 - **API**: http://localhost
-- **Mailpit**: http://localhost:8025
 
 ### Método 2: Dockerfile.dev + Docker Compose
 
 #### 1. Clonar e Configurar
-
+#### antes de clonar o .env adicionar as variaveis de ambiente para o serviço de email(smtp)
 ```bash
 git clone https://github.com/CaioCLDias/travel-orders-api.git
 cd travel-orders-api
@@ -99,7 +98,7 @@ docker-compose -f docker-compose.dev.yml exec laravel php artisan migrate
 
 #### 3. Acessar Aplicação
 
-- **API**: http://localhost:8080
+- **API**: http://localhost
 
 
 ## 🧪 Execução de Testes
