@@ -19,7 +19,7 @@
         <p>Sua ordem de viagem foi <strong>{{ $status }}</strong>.</p>
 
         <ul>
-            <li><strong>Destino:</strong> {{ $travelOrder->destination }} </li>
+            <li><strong>Destino:</strong> {{ $travelOrder->destination->name }} </li>
             <li><strong>Data de ida:</strong> {{ \Carbon\Carbon::parse($travelOrder->departure_date)->format('d/m/Y') }}
             </li>
             <li><strong>Data de volta:</strong> {{ \Carbon\Carbon::parse($travelOrder->return_date)->format('d/m/Y') }}
