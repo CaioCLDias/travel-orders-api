@@ -37,11 +37,27 @@ API backend completa para gerenciamento de ordens de viagem com foco na seguran�
 ### Método 1: Laravel Sail (Linux/Mac)
 
 #### 1. Clonar e Configurar
+#### Antes de criar o .env adicionar as variaveis de ambiente para o serviço de email de sua preferencia (smtp) no .env.sample
+#### Para os avaliadores da Onfly foi enviado as credendias de um serviço smtp da sendblue
+#### SMTP
+MAIL_MAILER=smtp
+MAIL_HOST=
+MAIL_PORT=587
+MAIL_USERNAME=
+MAIL_PASSWORD=
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=
+MAIL_FROM_NAME="Travel Orders"
+MAIL_MAIL_LOG_CHANNEL=stack
 
 ```bash
 git clone https://github.com/CaioCLDias/travel-orders-api.git
+```
+```bash
 cd travel-orders-api
+``````bash
 cp .env.example .env
+```env.example .env
 ```
 
 #### 2. Instalar Dependências
@@ -73,10 +89,25 @@ cp .env.example .env
 ### Método 2: Dockerfile.dev + Docker Compose
 
 #### 1. Clonar e Configurar
-#### antes de clonar o .env adicionar as variaveis de ambiente para o serviço de email(smtp)
+#### Antes de criar o .env adicionar as variaveis de ambiente para o serviço de email de sua preferencia (smtp) no .env.sample
+#### Para os avaliadores da Onfly foi enviado as credendias de um serviço smtp da sendblue
+#### SMTP
+MAIL_MAILER=smtp
+MAIL_HOST=
+MAIL_PORT=587
+MAIL_USERNAME=
+MAIL_PASSWORD=
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=
+MAIL_FROM_NAME="Travel Orders"
+MAIL_MAIL_LOG_CHANNEL=stack
+
 ```bash
 git clone https://github.com/CaioCLDias/travel-orders-api.git
+```
+```bash
 cd travel-orders-api
+``````bash
 cp .env.example .env
 ```
 
@@ -93,16 +124,7 @@ composer update
 #### 3. Executar com Docker Compose Dev
 
 ```bash
-# Subir containers com configuração de desenvolvimento
 docker-compose -f docker-compose.dev.yml up -d
-
-# Aguardar containers iniciarem (30 segundos)
-sleep 30
-
-# Configurar aplicação
-docker-compose -f docker-compose.dev.yml exec laravel php artisan key:generate
-docker-compose -f docker-compose.dev.yml exec laravel php artisan jwt:secret
-docker-compose -f docker-compose.dev.yml exec laravel php artisan migrate
 ```
 
 #### 4. Acessar Aplicação
