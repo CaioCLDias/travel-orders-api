@@ -22,7 +22,7 @@ php artisan db:seed --force
 
 
 echo "🧹 Starting queue background commnad..."
-php artisan queue:work > storage/logs/queue.log 2>&1 &
+php artisan queue:work  &
 
 echo "✅ Startup complete. Launching PHP..."
 php -S 0.0.0.0:9000 -t public
