@@ -24,11 +24,11 @@ class DestinationService
             $states = State::orderBy('name')->get(['id', 'name', 'uf', 'ibge_code']);
             return ApiResponse::success(
                 $states,
-                'States retrieved successfully.',
+                'Estados listados com sucesso.',
             );
         } catch (\Exception $e) {
             return ApiResponse::error(
-                'An error occurred while retrieving states: ' . $e->getMessage(),
+                'Ocorreu um erro ao listar estados ' . $e->getMessage(),
                 500
             );
         }
@@ -54,18 +54,18 @@ class DestinationService
 
             if ($cities->isEmpty()) {
                 return ApiResponse::error(
-                    'No cities found for the specified state.',
+                    'Nenhuma cidade encontrada para o estado informado.',
                     404
                 );
             }
 
             return ApiResponse::success(
                 $cities,
-                'Cities retrieved successfully.',
+                'Cidades listadas com sucesso.',
             );
         } catch (\Exception $e) {
             return ApiResponse::error(
-                'An error occurred while retrieving cities: ' . $e->getMessage(),
+                'Ocorreu um erro ao listar as cidades ' . $e->getMessage(),
                 500
             );
         }

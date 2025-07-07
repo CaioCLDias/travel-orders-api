@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  laravel:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: travel_orders_api_dev
+    restart: always
+    volumes:
+      - ./:/var/www/html
+      - ./start.sh:/usr/local/bin/start.sh
+    working_dir: /var/www/html
+    command: ["sh", "/usr/local/bin/start.sh"]
+    environment:
+      APP_ENV: local
+      DB_HOST: mysql
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "80:9000"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - app
+
+  mysql:
+    image: mysql/mysql-server:8.0
+    restart: always
+    container_name: mysql_test
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}", "--silent"]
+      interval: 5s
+      retries: 10
+      timeout: 5s
+    networks:
+      - app
+
+volumes:
+  mysql-data:
+
+networks:
+  app:
+    driver: bridge

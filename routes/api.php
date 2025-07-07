@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TravelOrderController;
 use App\Http\Controllers\Admin\TravelOrderController as AdminTravelOrderController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\DestinationController;
 use App\Http\Services\Notifications\TravelOrderNotificationService;
 use App\Models\TravelOrder;
@@ -24,7 +25,6 @@ Route::middleware(['auth:api'])->group(function () {
         Route::get('/', [TravelOrderController::class, 'index'])->name('orders.index');
         Route::post('/', [TravelOrderController::class, 'store'])->name('orders.store');
         Route::get('/{order}', [TravelOrderController::class, 'show'])->name('orders.show');
-        Route::put('/{order}', [TravelOrderController::class, 'update'])->name('orders.update');
     });
 
     // Destination Routes
@@ -41,6 +41,10 @@ Route::middleware(['auth:api'])->group(function () {
             Route::get('/', [AdminTravelOrderController::class, 'index'])->name('admin.orders.index');
             Route::get('/{order}', [AdminTravelOrderController::class, 'show'])->name('admin.orders.show');
             Route::put('/{order}', [AdminTravelOrderController::class, 'updateStatus'])->name('admin.orders.updateStatus');
+        });
+
+        Route::prefix('users')->group(function () {
+            Route::post('/', [UserController::class, 'store'])->name('admin.users.store');
         });
     });
 });

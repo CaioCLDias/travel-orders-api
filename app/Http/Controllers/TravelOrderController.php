@@ -37,9 +37,8 @@ class TravelOrderController
     {
         $userId = auth()->id();
         $filters = $request->only(['status', 'date_from', 'date_to', 'destination']);
-        $perPage = $request->get('per_page', 10);
 
-        return $this->travelOrderService->listForUser($userId, $filters, $perPage);
+        return $this->travelOrderService->listForUser($userId, $filters);
 
     }
 

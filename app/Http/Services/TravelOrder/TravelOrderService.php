@@ -38,12 +38,12 @@ class TravelOrderService
 
             return ApiResponse::success(
                 new TravelOrderResource($travelOrder),
-                'Travel order created successfully.',
+                'Ordem de viagem criada com sucesso.',
                 201
             );
         } catch (\Exception $e) {
             return ApiResponse::error(
-                'An error occurred while creating the travel order: ',
+                'Ocorreu um erro ao criar a ordem de viagem: ',
                 500,
                 $e->getMessage()
             );
@@ -55,13 +55,12 @@ class TravelOrderService
      *
      * @param string $userId
      * @param array $filters
-     * @param int $perPage
      * @return JsonResponse
      */
-    public function listForUser(int $userId, array $filters = [], int $perPage): JsonResponse
+    public function listForUser(int $userId, array $filters = []): JsonResponse
     {
         try {
-            $query = TravelOrder::with('destination.stateRelation')->where('user_id', $userId);
+            $query = TravelOrder::with(['destination.stateRelation', 'user'])->where('user_id', $userId);
 
             if (isset($filters['status'])) {
                 $query->where('status', $filters['status']);
@@ -81,15 +80,15 @@ class TravelOrderService
                 $query->where('return_date', '<=', $filters['date_to']);
             }
 
-            $travelOrders = $query->paginate($perPage);
+            $travelOrders = $query->get();
 
             return  ApiResponse::success(
                 TravelOrderResource::collection($travelOrders),
-                'Travel orders retrieved successfully.'
+                'Ordens de viagem consultadas com sucesso.'
             );
         } catch (\Exception $e) {
             return ApiResponse::error(
-                'An error occurred while retrieving travel orders: ',
+                'Ocorreu um erro ao consultar as ordens de viagem: ',
                 500,
                 $e->getMessage()
             );
@@ -108,21 +107,21 @@ class TravelOrderService
     {
         try {
 
-            $travelOrder = TravelOrder::with('destination.stateRelation')->where('id', $id)
+            $travelOrder = TravelOrder::with(['destination.stateRelation', 'user'])->where('id', $id)
                 ->where('user_id', $userId)
                 ->first();
 
             if (!$travelOrder) {
-                return ApiResponse::error('Travel order not found.', 404);
+                return ApiResponse::error('Ordem de viagem não encontrada', 404);
             }
 
             return ApiResponse::success(
                 new TravelOrderResource($travelOrder),
-                'Travel order retrieved successfully.'
+                'Ordem de viagem consultada com sucesso.'
             );
         } catch (\Exception $e) {
             return ApiResponse::error(
-                'An error occurred while retrieving the travel order: ',
+                'Ocorreu um erro ao consultar a ordem de viagem: ',
                 500,
                 $e->getMessage()
             );
@@ -136,10 +135,10 @@ class TravelOrderService
      * @param int $perPage
      * @return JsonResponse
      */
-    public function listAll(array $filters = [], int $perPage = 10): JsonResponse
+    public function listAll(array $filters = []): JsonResponse
     {
         try {
-            $query = TravelOrder::with('destination.stateRelation');
+            $query = TravelOrder::with(['destination.stateRelation', 'user']);
 
             if (isset($filters['status'])) {
                 $query->where('status', $filters['status']);
@@ -159,15 +158,15 @@ class TravelOrderService
                 $query->where('return_date', '<=', $filters['date_to']);
             }
 
-            $travelOrders = $query->paginate($perPage);
+            $travelOrders = $query->get();
 
             return  ApiResponse::success(
                 TravelOrderResource::collection($travelOrders),
-                'Travel orders retrieved successfully.'
+                'Ordens de viagem consultadas com sucesso.'
             );
         } catch (\Exception $e) {
             return ApiResponse::error(
-                'An error occurred while retrieving travel orders: ',
+                'Aconteceu um erro ao consultar as ordens de viagem: ',
                 500,
                 $e->getMessage()
             );
@@ -184,19 +183,19 @@ class TravelOrderService
     {
         try {
 
-            $travelOrder = TravelOrder::with('destination.stateRelation')->find($travelOrderId);
+            $travelOrder = TravelOrder::with(['destination.stateRelation', 'user'])->find($travelOrderId);
 
             if (!$travelOrder) {
-                return ApiResponse::error('Travel order not found.', 404);
+                return ApiResponse::error('Ordem de viagem não encontrada', 404);
             }
 
             return ApiResponse::success(
                 new TravelOrderResource($travelOrder),
-                'Travel order retrieved successfully.'
+                'Ordem de viagem consultada com sucesso.'
             );
         } catch (\Exception $e) {
             return ApiResponse::error(
-                'An error occurred while retrieving the travel order: ',
+                'Um erro aconteceu ao consultar a ordem de viagem. ',
                 500,
                 $e->getMessage()
             );
@@ -216,11 +215,11 @@ class TravelOrderService
             $travelOrder = TravelOrder::with('user')->find($id);
 
             if (!$travelOrder) {
-                return ApiResponse::error('Travel order not found.', 404);
+                return ApiResponse::error('Ordem de Viagem não encontrada', 404);
             }
 
             if ($travelOrder->status === 'approved' && $newStatus === 'cancelled') {
-                return ApiResponse::error('Invalid credentials.', 401);
+                return ApiResponse::error('Não pode Cancelar uma venda já aprovadada', 400);
             }
 
             $travelOrder->status = $newStatus;

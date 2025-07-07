@@ -33,14 +33,5 @@ class UserSeeder extends Seeder
             ]
         );
 
-          User::firstOrCreate(
-            ['email' => 'ccldias@outlook.com'],
-            [
-                'name' => 'Caio Dias',
-                'password' => Hash::make('password'),
-                'is_admin' => false,
-                'email_verified_at' => now(),
-            ]
-        );
     }
 }

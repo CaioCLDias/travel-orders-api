@@ -25,9 +25,8 @@ class TravelOrderController
     public function index(Request $request): JsonResponse
     {
         $filters = $request->only(['status', 'date_from', 'date_to', 'destination']);
-        $perPage = $request->get('per_page', 10);
 
-        return $this->travelOrderService->listAll($filters, $perPage);
+        return $this->travelOrderService->listAll($filters);
 
     }
 

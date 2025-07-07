@@ -20,16 +20,16 @@ class AuthService
     {
         try {
             if (!$token = JWTAuth::attempt($credentials)) {
-                return ApiResponse::error('Invalid credentials.', 401);
+                return ApiResponse::error('Credenciais invalidas', 401);
             }
 
             return ApiResponse::success([
                 'access_token' => $token,
                 'token_type' => 'bearer',
                 'expires_in' => auth()->factory()->getTTL() * 60
-            ], 'Login successful.');
+            ], 'Login realizado com sucesso.');
         } catch (\Exception $e) {
-            return ApiResponse::error('An error occurred while processing your request.', 500, $e->getMessage());
+            return ApiResponse::error('Ocorreu um erro ao efetuar Login', 500, $e->getMessage());
         }
     }
 
@@ -44,10 +44,10 @@ class AuthService
         try {
             return ApiResponse::success(
                 Auth::user(),
-                'User retrieved successfully.'
+                'Usuario encontrado com sucesso.'
             );
         } catch (\Exception $e) {
-            return ApiResponse::error('An error occurred while retrieving the user.', 500, $e->getMessage());
+            return ApiResponse::error('Ocorreu um erro ao encontrar usuário', 500, $e->getMessage());
         }
     }
 
@@ -63,7 +63,7 @@ class AuthService
 
             return ApiResponse::success(null, 'Logout successful.');
         } catch (\Exception $e) {
-            return ApiResponse::error('An error occurred while logging out.', 500, $e->getMessage());
+            return ApiResponse::error('Ocorreu um erro ao realizar o logout.', 500, $e->getMessage());
         }
     }
 
@@ -85,7 +85,7 @@ class AuthService
             ], 'Token refreshed successfully.');
             
         } catch (\Exception $e) {
-            return ApiResponse::error('An error occurred while refreshing the token.', 500, $e->getMessage());
+            return ApiResponse::error('Ocorreu um erro ao renovar o token', 500, $e->getMessage());
         }
     }
 }
