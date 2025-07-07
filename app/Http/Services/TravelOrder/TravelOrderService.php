@@ -84,7 +84,7 @@ class TravelOrderService
 
             return  ApiResponse::success(
                 TravelOrderResource::collection($travelOrders),
-                'Ordens de viagem consultadas com sucesso.'
+                'Ordens de viagem listada com sucesso.'
             );
         } catch (\Exception $e) {
             return ApiResponse::error(
@@ -232,11 +232,11 @@ class TravelOrderService
 
             return ApiResponse::success(
                 new TravelOrderResource($travelOrder),
-                'Travel order status updated successfully.'
+                'Oder de Viagem atualizada com sucesso.'
             );
         } catch (\Exception $e) {
             return ApiResponse::error(
-                'An error occurred while updating the travel order status: ',
+                'Ocorreu um erro ao atualizar a ordem de viagem: ',
                 500,
                 $e->getMessage()
             );

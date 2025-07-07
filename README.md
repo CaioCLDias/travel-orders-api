@@ -1,61 +1,193 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Travel Orders API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Uma API robusta para gerenciamento de ordens de viagem, desenvolvida com Laravel 12 e autenticação JWT. Sistema que permite usuários autenticados criarem, listarem e visualizarem suas próprias ordens de viagem de forma segura.
 
-## About Laravel
+## 📋 Resumo do Projeto
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+API backend completa para gerenciamento de ordens de viagem com foco na segurança e isolamento de dados por usuário. Desenvolvida seguindo as melhores práticas do Laravel com arquitetura limpa e escalável.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Principais Funcionalidades
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Autenticação JWT**: Sistema seguro baseado em JSON Web Tokens
+- **CRUD de Ordens de Viagem**: Gerenciamento completo de ordens por usuário
+- **Sistema de Destinos**: Gerenciamento de cidades e estados
+- **API RESTful**: Endpoints bem estruturados
+- **Testes Automatizados**: Cobertura com PHPUnit
+- **Containerização**: Docker para desenvolvimento
+- **Cadastro de Usuario**: Cadastrar usuários para testes
 
-## Learning Laravel
+### Tecnologias
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- **Backend**: Laravel 12 (PHP 8.2+)
+- **Autenticação**: JWT (tymon/jwt-auth)
+- **Banco de Dados**: MySQL 8.0
+- **Containerização**: Docker & Docker Compose
+- **Testes**: PHPUnit
+- **Email**: Mailpit (desenvolvimento)
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 🚀 Como Executar Localmente
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Pré-requisitos
 
-## Laravel Sponsors
+- **Docker** (versão 20.10+)
+- **Docker Compose** (versão 2.0+)
+- **Git**
+- **Composer**
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Método 1: Laravel Sail (Linux/Mac)
 
-### Premium Partners
+#### 1. Clonar e Configurar
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+```bash
+git clone https://github.com/CaioCLDias/travel-orders-api.git
+cd travel-orders-api
+cp .env.example .env
+```
 
-## Contributing
+#### 2. Instalar Dependências
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+    composer install 
+```
 
-## Code of Conduct
+#### 3. Iniciar Aplicação
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+# Subir containers
+./vendor/bin/sail up -d
 
-## Security Vulnerabilities
+# Configurar aplicação
+./vendor/bin/sail artisan key:generate
+./vendor/bin/sail artisan jwt:secret
+./vendor/bin/sail artisan migrate
+./vendor/bin/sail artisan db:seed
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# Iniciar filas de email (em terminal separado)
+./vendor/bin/sail artisan queue:work
+```
 
-## License
+#### 4. Acessar Aplicação
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- **API**: http://localhost
+- **Mailpit**: http://localhost:8025
+
+### Método 2: Dockerfile.dev + Docker Compose
+
+#### 1. Clonar e Configurar
+
+```bash
+git clone https://github.com/CaioCLDias/travel-orders-api.git
+cd travel-orders-api
+cp .env.example .env
+```
+
+
+#### 2. Executar com Docker Compose Dev
+
+```bash
+# Subir containers com configuração de desenvolvimento
+docker-compose -f docker-compose.dev.yml up -d
+
+# Aguardar containers iniciarem (30 segundos)
+sleep 30
+
+# Configurar aplicação
+docker-compose -f docker-compose.dev.yml exec laravel php artisan key:generate
+docker-compose -f docker-compose.dev.yml exec laravel php artisan jwt:secret
+docker-compose -f docker-compose.dev.yml exec laravel php artisan migrate
+```
+
+#### 3. Acessar Aplicação
+
+- **API**: http://localhost:8080
+
+
+## 🧪 Execução de Testes
+
+### Executar Testes
+
+**Com Laravel Sail**
+```bash
+./vendor/bin/sail artisan test
+./vendor/bin/sail artisan test --coverage
+```
+
+**Com Docker**
+```bash
+docker-compose -f docker-compose.dev.yml exec laravel php artisan test
+docker-compose -f docker-compose.dev.yml exec laravel php artisan test --coverage
+```
+
+## 🌐 Endpoints da API
+
+### Autenticação
+```
+POST   /api/login              # Login
+GET    /api/me                 # Dados do usuário
+POST   /api/logout             # Logout
+POST   /api/refresh            # Refresh token
+```
+
+### Ordens de Viagem
+```
+GET    /api/travel-orders       # Listar ordens do usuário
+POST   /api/travel-orders       # Criar nova ordem
+GET    /api/travel-orders/{id}  # Visualizar ordem específica
+```
+
+### Destinos
+```
+GET    /api/destinations/states                    # Listar estados
+GET    /api/destinations/cities/{stateIbgeCode}    # Listar cidades por estado
+```
+
+### Admin (Requer is_admin)
+```
+GET    /api/admin/travel-orders     # Listar todas as ordens
+PUT    /api/admin/travel-orders/{id} # Atualizar status da ordem
+POST   /api/admin/users            # Criar usuário
+```
+---
+
+## 🔒 Segurança e Boas Práticas
+
+### Implementadas
+- ✅ Autenticação JWT com expiração
+- ✅ Isolamento de dados por usuário
+- ✅ Validação rigorosa de entrada
+- ✅ Middleware de autorização
+- ✅ Form Requests para validação
+- ✅ API Resources para controle de exposição
+
+### Arquitetura
+- **MVC + Services**: Separação clara de responsabilidades
+- **Repository Pattern**: Abstração de acesso a dados
+- **Dependency Injection**: Inversão de controle
+- **Exception Handling**: Tratamento centralizado de erros
+
+## 👥 Usuários de Teste
+
+- **Admin**
+  - Email: `admin@onfly.com.br`
+  - Senha: `password`
+
+- **Comum**
+  - Email: `common@onfly.com.br`
+  - Senha: `password`
+
+---
+
+## 👨‍💻 Autor
+
+**Caio Dias** – [@CaioCLDias](https://github.com/CaioCLDias)
+
+---
+
+## 📄 Licença
+
+Este projeto está sob a licença MIT.
+
+---
+
+*Desenvolvido com ❤️ usando Laravel e as melhores práticas de desenvolvimento.*
+

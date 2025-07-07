@@ -1,5 +1,6 @@
 FROM php:8.4-fpm-alpine
 
+# Instalar dependências
 RUN apk add --no-cache \
     bash \
     git \
@@ -14,8 +15,10 @@ RUN apk add --no-cache \
     zip \
     icu-dev \
     mysql-client \
-    supervisor
+    supervisor \
+    tzdata
 
+# Instalar extensões PHP
 RUN docker-php-ext-configure gd \
         --with-freetype \
         --with-jpeg \
@@ -30,17 +33,20 @@ RUN docker-php-ext-configure gd \
         gd \
         opcache
 
+# Timezone
 ENV TZ=America/Sao_Paulo
 
+# Diretório de trabalho
 WORKDIR /var/www/html
 
+# Copiar código do projeto
 COPY . .
 
+# Instalar o Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
 
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer \
- && php artisan config:cache \
- && php artisan route:cache \
- && php artisan view:cache
+# Copiar supervisor config
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-
-CMD ["php", "-S", "0.0.0.0:9000", "-t", "public"]
+# Comando de inicialização
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
